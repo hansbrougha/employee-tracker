@@ -14,12 +14,52 @@ async function choicePrompts() {
           value: "GET_EMPLOYEES"
         },
         {
+          name: "View All Employees By Department",
+          value: "EMPLOYEES_BY_DEPARTMENT"
+        },
+        {
+          name: "View Employees By Manager",
+          value: "EMPLOYEES_BY_MANAGER"
+        },
+        {
+          name: "Add Employee",
+          value: "ADD_EMPLOYEE"
+        },
+        {
+          name: "Delete Employee",
+          value: "DELETE_EMPLOYEE"
+        },
+        {
+          name: "Update Employee Role",
+          value: "UPDATE_ROLE"
+        },
+        {
+          name: "Update Employee Manager",
+          value: "UPDATE_MANAGER"
+        },
+        {
           name: "Get Roles",
           value: "GET_ROLES"
         },
         {
+          name: "Add Role",
+          value: "ADD_ROLE"
+        },
+        {
+          name: "Delete Role",
+          value: "DELETE_ROLE"
+        },
+        {
           name: "Get Departments",
           value: "GET_DEPARTMENTS"
+        },
+        {
+          name: "Add Department",
+          value: "ADD_DEPARTMENT"
+        },
+        {
+          name: "Delete Department",
+          value: "DELETE_DEPARTMENT"
         },
         {
           name: "Exit Database.",
