@@ -103,12 +103,14 @@ async function choicePrompts() {
       return quit();
   }
 }
+
 //View Employees
 async function getEmployees() {
   const employees = await db.allEmployees();
   console.table(employees);
   choicePrompts();
 }
+
 //View Employees By Department
 async function employeesByDepartment() {
   const departments = await db.allDepartments();
@@ -130,10 +132,11 @@ async function employeesByDepartment() {
   choicePrompts();
 }
 
+//View Employees By Manager
 async function employeesByManager() {
   const managers = await db.AllEmployees();
 
-  const managerChoices = managers.map(({ id, first_name, last_name }) => ({
+  const managerOptions = managers.map(({ id, first_name, last_name }) => ({
     name: `${first_name} ${last_name}`,
     value: id
   }));
@@ -143,7 +146,7 @@ async function employeesByManager() {
       type: "list",
       name: "managerId",
       message: "Please Choose a Manager:",
-      choices: managerChoices
+      choices: managerOptions
     }
   ]);
 
@@ -158,6 +161,7 @@ async function employeesByManager() {
   choicePrompts();
 }
 
+//Add New Role
 async function addRole() {
   const departments = await db.allDepartments();
   const departmentChoices = await departments.map(({ id, name }) => ({
@@ -190,6 +194,34 @@ async function addRole() {
 async function getRoles() {
   const roles = await db.allRoles();
   console.table(roles);
+  choicePrompts();
+}
+
+//Update Employee Role
+async function updateRole() {
+  const employees = await db.allEmployees();
+  const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+    name: `${first_name} ${last_name}`,
+    value id:
+  }));
+
+  const { employeeId } = await db.allRoles();
+  const roleChoices = roles.map(({ id, title }) => ({
+    name: title,
+    value: id
+  }));
+
+  const { roleId } = await prompt([
+    {
+      type: "list",
+      name: "roleId",
+      message: "Assign new role:",
+      choices roleChoices
+    }
+  ]);
+
+  await db.updateEmployeeRole(employeeId, roleId);
+  console.log("Employee role updated.");
   choicePrompts();
 }
 
@@ -243,17 +275,17 @@ async function addEmployee() {
 
   employee.role_id = roleId;
 
-  const managerChoices = employees.map(({ id, first_name, last_name }) => ({
+  const managerOptions = employees.map(({ id, first_name, last_name }) => ({
     name: `${first_name} ${last_name}`,
     value: id
   }));
-  managerChoices.unshift({ name: "None", value: null });
+  managerOptions.unshift({ name: "None", value: null });
 
   const { managerId } = await prompt({
     type: "list",
     name: "managerId",
     message: "Assign employee to manager:",
-    choices: managerChoices
+    choices: managerOptions
   });
 
   employee.manager_id = managerId;
