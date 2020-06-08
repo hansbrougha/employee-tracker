@@ -15,10 +15,6 @@ class DB {
     return this.connection.query("INSERT INTO employee SET ?", employee);
   }
 
-  // deleteEmployee(employeeId) {
-  //   return this.connection.query(employeeId);
-  // }
-
   //Update Roles
   updateEmployeeRole(roleId) {
     return this.connection.query("UPDATE employee SET role_id = WHERE ID = ?", [
@@ -27,10 +23,6 @@ class DB {
     ]);
   }
 
-  // updateEmployeeManager(managerId) {
-  //   return this.connection.query(managerId);
-  // }
-
   //View Employees by Manager
   allManagers() {
     return this.connection.query(
@@ -38,6 +30,7 @@ class DB {
       employeeId
     );
   }
+
   //View All Roles
   allRoles() {
     return this.connection.query(
@@ -50,14 +43,10 @@ class DB {
     return this.connection.query("INSERT INTO role SET?", role);
   }
 
-  // deleteRole(roleId) {
-  //   return this.connection.query(roleId);
-  // }
-
   //View Employees By Department
   allDepartments() {
     return this.connection.query(
-      "SELECT department.id, department.name, SUM(role.salary) AS total_budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id GROUP BY department.id, department.name;"
+      "SELECT department.id, department.name, SUM(role.salary) AS utilized_budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id GROUP BY department.id, department.name;"
     );
   }
 
@@ -71,10 +60,6 @@ class DB {
   newDepartment(department) {
     return this.connection.query("INSERT INTO department SET ?", department);
   }
-
-  // deleteDepartment(departmentId) {
-  //   return this.connection.query(departmentId);
-  // }
 
   employeesByManager(managerId) {
     return this.connection.query(
