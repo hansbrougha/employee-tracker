@@ -69,21 +69,31 @@ class DB {
   }
 
   //DELETE EMPLOYEE
-
   deleteEmployee(employeeId) {
     return this.connection.query(
       "DELETE FROM employee WHERE id = ?",
       employeeId
     );
   }
-  //DELETE ROLE
 
+  //DELETE ROLE
   deleteRole(roleId) {
     return this.connection.query("DELETE FROM role WHERE id = ?", roleId);
   }
+
   //DELETE DEPARTMENT
   deleteDepartment(departmentId) {
-    return this.connection.query("DELETE FROM department WHERE id = ?");
+    return this.connection.query(
+      "DELETE FROM department WHERE id = ?",
+      departmentId
+    );
+  }
+
+  updateEmployeeManager(employeeId, managerId) {
+    return this.connection.query(
+      "UPDATE employee SET manager_id = ? WHERE ID = ?",
+      [managerId, employeeId]
+    );
   }
 }
 
