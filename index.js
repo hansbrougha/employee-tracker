@@ -178,7 +178,7 @@ async function addRole() {
       type: "list",
       name: "department_id",
       message: "Choose a department for this role:",
-      choices departmentChoices
+      choices: departmentChoices
     }
   });
   await db.addRole(role);
@@ -199,6 +199,20 @@ async function getDepartments() {
   console.table(departments);
   choicePrompts();
 }
+
+//Add Departments
+async function addDepartment(){
+  const department = await prompt([
+    {
+      name: "name",
+      message: "Enter a department name:"
+    }
+  ]);
+  await db.addDepartment(department);
+  console.log("Department added to database.");
+  choicePrompts();
+}
+
 //Quit program
 function quit() {
   console.log("Exiting database...");
