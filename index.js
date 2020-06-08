@@ -312,10 +312,14 @@ async function deleteEmployee() {
     {
       type: "list",
       name: "employeeId",
-      message: "Which employee would you like to remove from the database?"
+      message: "Choose an employee to terminate:"
       choices: employeeChoices
     }
   ]);
+
+  await db.deleteEmployee(employeeId);
+  console.log("Employee has been terminated.")
+  choicePrompts();
 }
 //REMOVE ROLES
 
@@ -330,7 +334,7 @@ async function deleteRole() {
     {
       type: "list",
       name: "roleId",
-      message: "Choose a role to delete.",
+      message: "Choose a role to delete:",
       choices: roleChoices
     }
   ]);
@@ -340,6 +344,22 @@ async function deleteRole() {
   choicePrompts();
 }
 //REMOVE DEPARTMENTS
+async function deleteDepartment() {
+  const departments = await db.allDepartments();
+  const departmentChoices = departments.map(({ id, name }) => ({
+    name: name,
+    value: id
+  }));
+  const { departmentId } = await prompt({
+    type: "list",
+    name: "departmentId",
+    message: "Choose a department to delete:",
+    choices: departmentChoices
+  });
+  await db.deleteDepartment(departmentId);
+  console.log("Removed department from the database");
+  choicePrompts();
+}
 
 //Exit Database
 function quit() {
