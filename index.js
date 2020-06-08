@@ -118,7 +118,8 @@ async employeesByDepartment() {
     {
       type: "list",
       name: "departmentId",
-      message: departmentChoices
+      message: "Please choose a department."
+      choices: departmentChoices
     }
   ]);
   const employees = await db.employeesByDepartment(departmentId);
