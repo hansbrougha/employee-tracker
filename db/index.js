@@ -11,7 +11,7 @@ class DB {
     );
   }
 
-  addEmployee(employee) {
+  newEmployee(employee) {
     return this.connection.query("INSERT INTO employee SET ?", employee);
   }
 
@@ -46,7 +46,7 @@ class DB {
   }
 
   //Add role
-  addRole(role) {
+  newRole(role) {
     return this.connection.query("INSERT INTO role SET?", role);
   }
 
@@ -68,7 +68,7 @@ class DB {
     );
   }
 
-  addDepartment(department) {
+  newDepartment(department) {
     return this.connection.query("INSERT INTO department SET ?", department);
   }
 
