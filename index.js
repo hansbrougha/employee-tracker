@@ -158,6 +158,34 @@ async function employeesByManager() {
   choicePrompts();
 }
 
+async function addRole() {
+  const departments = await db.allDepartments();
+  const departmentChoices = await departments.map(({ id, name }) => ({
+    name: name,
+    value: id
+  }));
+
+  const role = await prompt({
+    {
+      name: "title", 
+      message: "Please add a new role:"
+    },
+    {
+      name: "salary",
+      message: "Enter a salary for this role:"
+    },
+    {
+      type: "list",
+      name: "department_id",
+      message: "Choose a department for this role:",
+      choices departmentChoices
+    }
+  });
+  await db.addRole(role);
+  console.log("Role added to database.");
+  choicePrompts();
+}
+
 //View Roles
 async function getRoles() {
   const roles = await db.allRoles();
