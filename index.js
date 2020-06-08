@@ -1,7 +1,19 @@
 //DEPENDENCIES
 const { prompt } = require("inquirer");
 const db = require("./db");
+const logo = require("asciiart-logo");
 require("console.table");
+
+init();
+
+// Display logo text, load main prompts
+function init() {
+  const logoText = logo({ name: "Employee Manager" }).render();
+
+  console.log(logoText);
+
+  choicePrompts();
+}
 
 //MAIN PROMPTS SECTION
 async function choicePrompts() {
@@ -35,10 +47,10 @@ async function choicePrompts() {
           name: "Update Employee Role",
           value: "UPDATE_ROLE"
         },
-        {
-          name: "Update Employee Manager",
-          value: "UPDATE_MANAGER"
-        },
+        // {
+        //   name: "Update Employee Manager",
+        //   value: "UPDATE_MANAGER"
+        // },
         {
           name: "Get Roles",
           value: "GET_ROLES"
@@ -85,8 +97,8 @@ async function choicePrompts() {
       return removeEmployee();
     case "UPDATE_ROLE":
       return updateRole();
-    case "UPDATE_MANAGER":
-      return updateManager();
+    // case "UPDATE_MANAGER":
+    //   return updateManager();
     case "GET_DEPARTMENTS":
       return getDepartments();
     case "ADD_DEPARTMENT":
@@ -122,7 +134,7 @@ async function employeesByDepartment() {
     {
       type: "list",
       name: "departmentId",
-      message: "Please specify a department:"
+      message: "Please specify a department:",
       choices: departmentChoices
     }
   ]);
@@ -134,7 +146,7 @@ async function employeesByDepartment() {
 
 //View Employees By Manager
 async function employeesByManager() {
-  const managers = await db.AllEmployees();
+  const managers = await db.allEmployees();
 
   const managerOptions = managers.map(({ id, first_name, last_name }) => ({
     name: `${first_name} ${last_name}`,
@@ -169,10 +181,10 @@ async function addRole() {
     value: id
   }));
 
-  const role = await prompt({
+  const role = await prompt([
     {
-      name: "title", 
-      message: "Please add a new role:"
+      name: "title",
+      message: "Enter a new role:"
     },
     {
       name: "salary",
@@ -184,7 +196,7 @@ async function addRole() {
       message: "Choose a department for this role:",
       choices: departmentChoices
     }
-  });
+  ]);
   await db.newRole(role);
   console.log("Role added to database.");
   choicePrompts();
@@ -200,12 +212,23 @@ async function getRoles() {
 //Update Employee Role
 async function updateRole() {
   const employees = await db.allEmployees();
+
   const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
     name: `${first_name} ${last_name}`,
-    value id:
+    value: id
   }));
 
-  const { employeeId } = await db.allRoles();
+  const { employeeId } = await prompt([
+    {
+      type: "list",
+      name: "employeeId",
+      message: "Choose an employee to change their role:",
+      choices: employeeChoices
+    }
+  ]);
+
+  const roles = await db.allRoles();
+
   const roleChoices = roles.map(({ id, title }) => ({
     name: title,
     value: id
@@ -216,12 +239,14 @@ async function updateRole() {
       type: "list",
       name: "roleId",
       message: "Assign new role:",
-      choices roleChoices
+      choices: roleChoices
     }
   ]);
 
-  await db.updateEmployeeRole(employeeId, roleId);
-  console.log("Employee role updated.");
+  await db.updateRole(employeeId, roleId);
+
+  console.log("Employee role has been updated.");
+
   choicePrompts();
 }
 
@@ -233,7 +258,7 @@ async function getDepartments() {
 }
 
 //Add Departments
-async function addDepartment(){
+async function addDepartment() {
   const department = await prompt([
     {
       name: "name",
@@ -292,15 +317,12 @@ async function addEmployee() {
 
   await db.newEmployee(employee);
 
-  console.log(
-    "Added Employee to Database."
-  );
+  console.log("Added Employee to Database.");
 
   choicePrompts();
 }
 
-//REMOVE EMPLOYEES
-
+//TERMINATE EMPLOYEES
 async function deleteEmployee() {
   const employees = await db.allEmployees();
   const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
@@ -312,22 +334,23 @@ async function deleteEmployee() {
     {
       type: "list",
       name: "employeeId",
-      message: "Choose an employee to terminate:"
+      message: "Choose an employee to terminate:",
       choices: employeeChoices
     }
   ]);
 
   await db.deleteEmployee(employeeId);
-  console.log("Employee has been terminated.")
+  console.log("Employee has been terminated.");
   choicePrompts();
 }
-//REMOVE ROLES
 
+//DELETE ROLES
 async function deleteRole() {
   const roles = await db.allRoles();
   const roleChoices = roles.map(({ id, title }) => ({
     name: title,
-    value, id
+    value,
+    id
   }));
 
   const { roleId } = await prompt([
@@ -343,7 +366,8 @@ async function deleteRole() {
   console.log("Role deleted from database.");
   choicePrompts();
 }
-//REMOVE DEPARTMENTS
+
+//DELETE DEPARTMENTS
 async function deleteDepartment() {
   const departments = await db.allDepartments();
   const departmentChoices = departments.map(({ id, name }) => ({
