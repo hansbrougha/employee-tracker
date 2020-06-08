@@ -1,7 +1,9 @@
+//DEPENDENCIES
 const { prompt } = require("inquirer");
 const db = require("./db");
 require("console.table");
 
+//MAIN PROMPTS SECTION
 async function choicePrompts() {
   const { choice } = await prompt([
     {
@@ -107,8 +109,8 @@ async function getEmployees() {
   console.table(employees);
   choicePrompts();
 }
-
-async employeesByDepartment() {
+//View Employees By Department
+async function employeesByDepartment() {
   const departments = await db.allDepartments();
   const departmentChoices = departments.map(({ id, name }) => ({
     name: name,
@@ -118,12 +120,41 @@ async employeesByDepartment() {
     {
       type: "list",
       name: "departmentId",
-      message: "Please choose a department."
+      message: "Please specify a department:"
       choices: departmentChoices
     }
   ]);
+
   const employees = await db.employeesByDepartment(departmentId);
   console.table(employees);
+  choicePrompts();
+}
+
+async function employeesByManager() {
+  const managers = await db.AllEmployees();
+
+  const managerChoices = managers.map(({ id, first_name, last_name }) => ({
+    name: `${first_name} ${last_name}`,
+    value: id
+  }));
+
+  const { managerId } = await prompt([
+    {
+      type: "list",
+      name: "managerId",
+      message: "Please Choose a Manager:",
+      choices: managerChoices
+    }
+  ]);
+
+  const employees = await db.employeesByManager(managerId);
+
+  if (employees.length === 0) {
+    console.log("This employee has no direct reports.");
+  } else {
+    console.table(employees);
+  }
+
   choicePrompts();
 }
 
