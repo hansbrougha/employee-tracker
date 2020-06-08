@@ -299,7 +299,49 @@ async function addEmployee() {
   choicePrompts();
 }
 
-//Quit program
+//REMOVE EMPLOYEES
+
+async function deleteEmployee() {
+  const employees = await db.allEmployees();
+  const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+    name: `${first_name} ${last_name}`,
+    value: id
+  }));
+
+  const { employeeId } = await prompt([
+    {
+      type: "list",
+      name: "employeeId",
+      message: "Which employee would you like to remove from the database?"
+      choices: employeeChoices
+    }
+  ]);
+}
+//REMOVE ROLES
+
+async function deleteRole() {
+  const roles = await db.allRoles();
+  const roleChoices = roles.map(({ id, title }) => ({
+    name: title,
+    value, id
+  }));
+
+  const { roleId } = await prompt([
+    {
+      type: "list",
+      name: "roleId",
+      message: "Choose a role to delete.",
+      choices: roleChoices
+    }
+  ]);
+
+  await db.deleteRole(roleId);
+  console.log("Role deleted from database.");
+  choicePrompts();
+}
+//REMOVE DEPARTMENTS
+
+//Exit Database
 function quit() {
   console.log("Exiting database...");
   process.exit();
