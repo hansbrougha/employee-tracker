@@ -89,6 +89,7 @@ class DB {
     );
   }
 
+  //UPDATE EMPLOYEE BY MANAGER
   updateEmployeeManager(employeeId, managerId) {
     return this.connection.query(
       "UPDATE employee SET manager_id = ? WHERE ID = ?",
