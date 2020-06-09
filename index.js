@@ -351,8 +351,7 @@ async function deleteRole() {
   const roles = await db.allRoles();
   const roleOptions = roles.map(({ id, title }) => ({
     name: title,
-    value,
-    id
+    value: id
   }));
 
   const { roleId } = await prompt([
