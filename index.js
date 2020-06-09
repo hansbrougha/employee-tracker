@@ -245,7 +245,7 @@ async function updateRole() {
     }
   ]);
 
-  await db.updateRole(employeeId, roleId);
+  await db.updateEmployeeRole(employeeId, roleId);
 
   console.log("Employee role has been updated.");
 
