@@ -63,7 +63,6 @@ async function choicePrompts() {
           name: "Delete Employee",
           value: "DELETE_EMPLOYEE"
         },
-
         // {
         //   name: "Update Employee Manager",
         //   value: "UPDATE_MANAGER"
